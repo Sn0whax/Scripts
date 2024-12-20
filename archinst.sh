@@ -42,14 +42,6 @@ paru -S --noconfirm --needed \
     discord \
     alsa-utils
 
-# Remove default Linux kernel and headers
-paru -R --noconfirm linux linux-headers
-
-# Run sdboot-manage commands
-sudo sdboot-manage setup
-sudo sdboot-manage remove
-sudo sdboot-manage gen
-
 # Increase source volume by 200%
 pactl set-source-volume @DEFAULT_SOURCE@ +200%
 
@@ -115,3 +107,10 @@ done
 
 # Reload systemd configuration to apply changes
 sudo systemctl daemon-reload
+
+# Print message about cachyos sdboot-manage commands
+echo "Must run to enable cachyos sdboot-manage commands"
+echo "sudo sdboot-manage setup"
+echo "sudo sdboot-manage remove"
+echo "sudo sdboot-manage gen"
+echo "After this you can Paru -Rns linux linux-headers and keep CachyOS Kernel if you wish"

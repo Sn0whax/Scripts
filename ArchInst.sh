@@ -11,8 +11,8 @@ sudo ./cachyos-repo.sh
 # Install paru
 sudo pacman -S paru --noconfirm
 
-# Use paru to install the specified packages
-paru -S --noconfirm \
+# Use paru to install the specified packages and auto-allow dependencies
+paru -S --noconfirm --needed \
     cachyos-settings \
     systemd-boot-manager \
     fastfetch \
@@ -35,7 +35,11 @@ paru -S --noconfirm \
     winetricks \
     unimatrix-git \
     caca \
-    wine-cachyos
+    wine-cachyos \
+    gwenview \
+    rar \
+    haruna \
+    discord
 
 # Remove default Linux kernel and headers
 paru -R --noconfirm linux linux-headers
@@ -70,3 +74,13 @@ echo "//192.168.1.100/NAS /mnt/nas cifs _netdev,nofail,vers=3.0,credentials=/etc
 
 # Mount the NAS
 sudo mount -a
+
+# Set Fish as the default shell for all users
+if ! grep -q '/usr/bin/fish' /etc/shells; then
+  echo '/usr/bin/fish' | sudo tee -a /etc/shells
+fi
+
+# Change the default shell for all users
+for user in $(cut -f1 -d: /etc/passwd); do
+  sudo chsh -s /usr/bin/fish "$user"
+done

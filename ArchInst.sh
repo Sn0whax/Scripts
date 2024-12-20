@@ -33,6 +33,8 @@ paru -S --noconfirm \
     proton-ge-custom-bin \
     python-pynvml \
     winetricks \
+    unimatrix-git \
+    caca \
     wine-cachyos
 
 # Remove default Linux kernel and headers

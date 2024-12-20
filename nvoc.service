@@ -1,0 +1,10 @@
+[Unit]
+Description=My Custom Script
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/nvoc.sh
+
+[Install]
+WantedBy=multi-user.target

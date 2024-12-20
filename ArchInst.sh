@@ -8,8 +8,8 @@ cd cachyos-repo
 # Run cachyos-repo setup script
 sudo ./cachyos-repo.sh
 
-# Install paru
-sudo pacman -S paru --noconfirm
+# Install paru with --needed to prevent reinstallation and auto-allow dependencies
+sudo pacman -S paru --noconfirm --needed
 
 # Use paru to install the specified packages and auto-allow dependencies
 paru -S --noconfirm --needed \
@@ -85,3 +85,33 @@ fi
 for user in $(cut -f1 -d: /etc/passwd); do
   sudo chsh -s /usr/bin/fish "$user"
 done
+
+# Copy nvoc.sh to /usr/local/bin/nvoc.sh and make it executable
+sudo cp "$(dirname "$0")/nvoc.sh" /usr/local/bin/nvoc.sh
+sudo chmod +x /usr/local/bin/nvoc.sh
+
+# Copy nvoc.service to /etc/systemd/system/nvoc.service
+sudo cp "$(dirname "$0")/nvoc.service" /etc/systemd/system/nvoc.service
+
+# Reload systemd to apply the new service file
+sudo systemctl daemon-reload
+
+# Enable and start the nvoc service
+sudo systemctl enable --now nvoc.service
+
+# Files to modify
+files=("/etc/systemd/system.conf" "/etc/systemd/user.conf")
+
+# Modify DefaultTimeoutStopSec and DefaultTimeoutAbortSec in both files
+for file in "${files[@]}"; do
+  # Modify DefaultTimeoutStopSec
+  sudo sed -i 's/^#DefaultTimeoutStopSec=.*/DefaultTimeoutStopSec=3s/' "$file"
+  sudo sed -i 's/^DefaultTimeoutStopSec=.*/DefaultTimeoutStopSec=3s/' "$file"
+
+  # Modify DefaultTimeoutAbortSec
+  sudo sed -i 's/^#DefaultTimeoutAbortSec=.*/DefaultTimeoutAbortSec=3s/' "$file"
+  sudo sed -i 's/^DefaultTimeoutAbortSec=.*/DefaultTimeoutAbortSec=3s/' "$file"
+done
+
+# Reload systemd configuration to apply changes
+sudo systemctl daemon-reload

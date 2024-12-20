@@ -39,7 +39,8 @@ paru -S --noconfirm --needed \
     gwenview \
     rar \
     haruna \
-    discord
+    discord \
+    alsa-utils
 
 # Remove default Linux kernel and headers
 paru -R --noconfirm linux linux-headers
